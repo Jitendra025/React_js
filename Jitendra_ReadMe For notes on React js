@@ -1,0 +1,188 @@
+1. The folder node_module contains all the dependecies of react js and we don't need to add any thing in this folder
+2. The public folder is main folder here. it's the root folde rwhich get serverd by web server. react js is mainly used for one page application. Notice the index.html in public folder added automatically
+ we don;t need to add any other html page in the project.
+3. Scripts file added in the src folder.    
+4. Notice the files in the src folder, the most inportent file here is index.js file that is that is importing App.js script in it
+5. The app.js is the first react.js componnent here added by default. If you go and check the App.js us can see JSX syntex for adding html. 
+6. The line 'ReactDOM.render(<App />, document.getElementById('root')); ' in index.js file is actually rendring the App.js component to root dive of index.html page.
+7 React js is basically create custom html components which we can use through out the application
+8. The Bable framework is used in React to compilation. That convert the JSX in javascript format that allow use to write html tags in js file.
+
+------ Understanding JSX-----------------------
+1. See App_notes.js. There are some notes added to make understanding
+
+---------------JSX Restrcitions-----------------------------
+1. Like in html when we add class in any html tag
+<div class='abc'> this can't be used in JSX and we need to use <div className='abc'>. The reason of this is the html code in react js component built inside a java script class where class keyword has  already used
+see below:
+class App extends Component {
+  render() { return (
+       <div className="App">
+        <h1>Hi, I am first react for jitendra</h1>
+       </div>
+     );
+  }
+So above the class keyword is used to create class and hence can't be used in html tag to add class.so in React we will use className instead of class to add css class.
+2. In react we need to add every thing of html in one root element like:
+class App extends Component {
+  render() { return (
+       <div className="App">
+        <h1>Hi, I am first react for jitendra</h1>
+       </div>
+     );
+  }
+  in above code we can't add one more h1 tag outside of div. Every thing should need to be wrapped under a root element
+  render() { return (
+       <div className="App">
+        <h1>Hi, I am first react for jitendra</h1>
+       </div>
+       <h1>Hi, I am first react for jitendra</h1>  -- this will give compilation error.
+     );
+
+-------------------------- Creating a functional component---------------------------
+1. A new component Person.js has been added in the Person folder . read that file. then thie person is used in the App.js file
+
+----------------------------Outputting dynamic content in component--------------------------
+1. If we want to print a dynamic content and not static we need to wrap that statement {}. See Person.js for detail
+
+------------------------------Working with props---------------------------
+1. Let make our components flexible, configurable using props. Now in the Person.js file in person fucntion we will add argument name props in the function
+2. Then from App.js we can pass property and value to person.
+
+--------------------------Understanding children prop-------------------------
+1. child porps are like when we want to set/display something open and closing braces of a component.html tag
+for example
+<Person name="jitendra", age="28">My Hobbies: Cricket</Person>. So here Jitendra and age are attributes of Person tag and my hobbies:cricket is kind of child prop
+
+--------------------------unsderstanding and Using state------------------------------------------
+1. State must be used carefull in components. There can be one state variable in class
+2. We can define properties in the the class same as c# and variable in function for example in Person.js
+3. The state variable can only be declare in component in which the class is inhertting component class.
+4. See App.js for use of state briefly.
+5. React components has a built-in state object. The state object is where you store property values that belongs to the component. When the state object changes, 
+   the component re-renders.
+6. In a React component, props are variables passed to it by its parent component. State on the other hand is still variables, but directly initialized and managed by the component. The state can be initialized by props. 
+   For example, a parent component might include a child component by calling
+7. There are two ways to initialize state in a React component: inside the constructor, and directly inside the class
+8. State can only be used within a class component
+9. React has another special built-in object called state, which allows components to create and manage their own data. So unlike props, components cannot pass data with state, 
+   but they can create and manage it internally
+10. State should not be modified directly, but it can be modified with a special method called setState( )
+this.state.id = “2020”; // wrong. react will not recognized this statement and will not chnage the state
+
+this.setState({         // correct  and this can be only used in the class components extends component class. not in the functions. For fucntion we use state Hook
+    id: "2020"
+});
+
+--------------------------------Handling events with method--------------------------------------------
+1. this is how we can call a function for example from a click evemt of the button. See App.js buttonj switch name
+2. In the last lecture, we saw that you can react to the onClick event - but to which other events can you listen? 
+You can find a list of supported events here: https://reactjs.org/docs/events.html#supported-events
+
+----------------------------------useing the useState() Hook for state manipulation---------------------------
+1.Form the react 16.8 now we have a way to manage state in functional components which was not there before 16.8.
+2. The feature React Hook is used to manage state in the functional components
+3. Here we can have multiple useState statement for different state variables in functional components.
+4. The stablished way to use state is in the class based components and not the Hook but we can use Hook if needed but that is just a recent feature 
+
+--------------------------------Stateless vs Statefull components------------------------------------
+1. Statefull components is any components that is managing state either state or useState.
+2. Stateless is the compomnents in which we are not manageing states. In our sample the Person component is statelessa s we are not managing any state there but APp.js is stateful
+3 It is a good practice use as many as stateless and presentable components like in our case Person.js
+4. Stateful transactions are call container components as well as the manage the state.
+
+----------------------------------Passing Method References between components-----------------------
+1. Passing method reference between components means calling a method defined in one component from another component.
+2. For example switcNameHandler in the App.js, if we need to call that method from Person.js to get click from one of the paragraph we can pass the reference of swithcNameHandle as prop
+Code in App.js:
+    <Person name={this.state.Person[0].name}  
+            age={this.state.Person[0].age}
+            click={this.swithcNameHandler}> My Hobbies: Cricket</Person> 
+Note  Person tag click is used to pass the reference of swithcNameHandle function so that this function can be invoked from paragraph in Person.js. 
+Name click can be anything as that is property name
+
+code in Person.js :
+    const person = (props) =>{
+    return (
+        <div>
+            <p>I am a Person and I am {Math.floor(Math.random()*30)}</p>
+            <p onClick={props.click}>I am  {props.name} and I am {props.age} years old</p> 
+            <p>{props.children}</p>  
+            </div>
+    );
+ 3. Passing parameters to functions form click event. kind of binding: see below in App.js
+ swithcNameHandler1=(NewName)=>{ // method is setting the name as per parameter for first person in array
+  
+    this.setState({
+      Person:[
+        {name:NewName,age:27},
+        {name:"jitu_g",age:31}
+      ]
+    })
+  }
+  // Passing reference of method to person component
+  <Person name={this.state.Person[1].name}  
+         age={this.state.Person[1].age}
+         click={this.swithcNameHandler1.bind(this,'Mohan')}> My Hobbies: Fotball</Person> // see the parameter passed in swithcNameHandler1
+        </div>
+Code in Person.js:
+<p onClick={props.click}>I am  {props.name} and I am {props.age} years old</p>  // click property is invoking the method in App.js
+
+--------------------------------------Adding two way binding-------------------------------------------
+1. Two way binding is when we pass props from calling js to callable js and alng with that we are able to change value in vica versa.
+2. For exampple in our App.js we will right a nameChangeHandle method , that will be called from a text input and value written in text box will pass to <person> tag in
+   App.js and what we will type in input text will change. Also for the first time load we will be passing name as props to display default name.
+
+   See the code below and same code is written in App.js and Person.js for understanding
+// For two way binding Onchange is sending value from Person.js to App.js and props.name is receiving value from App.js. So when input change in text bos will passed throguh a method to
+// App.js and send back to Person.js to display in text box. 
+// If value is passed in input type text then onChange must be called else the value in inout text can't be change or we will not able towriteanything in text. 
+// So in App.js we are calling changed in one person tag but not in one. So we will be able to type in only ine inout text.
+code in Person.js
+return (
+    <div>
+        {/* <p>I am a Person and I am {Math.floor(Math.random()*30)}</p> */}
+        <p onClick={props.click}>I am  {props.name} and I am {props.age} years old</p> 
+        <p>{props.children}</p>  
+        <input type="text" onChange={props.changed} value={props.name}></input> -- see the OnChange to call nameChangedHandle method in app.js and value tag.
+        </div>
+)
+
+Code in App.js -- Method that is setting value type in text box to state at index 1 only
+nameChangedHandler=(event)=>{
+    this.setState({
+      Person:[
+        {name:"Max",age:27},
+        {name:event.target.value,age:31}
+      ]
+    })
+  }
+
+  render() {
+      return (
+        <div className="App">
+         <h1>Hi, I am first react for jitendra</h1>
+         <p>This is really working</p>
+         <button onClick={this.swithcNameHandler}>Switch Name</button> 
+         <button onClick={this.swithcNameHandler1.bind(this,'Jitendra')}>Switch Name1</button>
+
+         <Person name={this.state.Person[0].name}  
+         age={this.state.Person[0].age}
+         click={this.swithcNameHandler}
+         > My Hobbies: Cricket</Person> -- Here we have passed name but not the changed, so when site will launch the text box for name max will ne read only .
+
+         <Person name={this.state.Person[1].name}  
+         age={this.state.Person[1].age}
+         click={this.swithcNameHandler1.bind(this,'Mohan')}
+         changed={this.nameChangedHandler}> My Hobbies: Fotball</Person> -- See in this in chnaged property we are passing the nameChangedHandler method as reference.
+        </div>
+      );
+
+----------------------------Adding styling with stylesheets-------------------------
+1. we can add styling in two wyas for react compoents.
+2. i using explicit class and inline
+3. For explicit class we have created a Person.css in person folder and impirted that css in Person.js
+4. For inline css stype we diid for Swithc name buttons in the App.js, please have a look to understanding
+
+--------------------------------- working With list and conditions----------------------------
+1. Rendring List and conditional Content
