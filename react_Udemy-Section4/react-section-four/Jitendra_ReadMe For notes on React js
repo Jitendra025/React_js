@@ -1,0 +1,189 @@
+----------------- This file containes the notes for section 4 of the Udeay react.js lecture---------------------
+-----------The section 4 code started by using the previous section code in folder react-complete-guide-------------
+
+----------------------------- Render list and conditional content----------------------------------
+1. We can use java script's terniary condition to show/hide controls in components. Please see the togglepersonlHandle method in the App.js file.
+ Also notice the addion of new state property showPerson using which we are enabling/disabling the personl section.
+ In App.js follwoing code is done to show the person element:
+
+
+ state ={ // in here also we can use any type of properties, currently we using array and may be adding other properties as we will progress
+
+    Person:[{name:"max",age:26},
+            {name:"jitu",age:32}      // we will us these properties in below in person   
+  ],
+  OtherState:"Some other state",
+  showPerson:false  // See this new property is added in the app.js
+  }
+  new method added:
+  togglePersonHandler=()=>{
+    var doesShow = this.setState.showPerson;
+    this.setState({showPerson:!doesShow})
+  }
+
+  The above method togglePersonHandler is used in the button with name Show Person
+  <button style={button_style} onClick={this.togglePersonHandler}>Show Person</button> 
+
+  The following way to render the element of using tertionary condition
+
+  { this.state.showPerson === true?
+           <div>
+         <Person name={this.state.Person[0].name}  
+         age={this.state.Person[0].age}
+         click={this.swithcNameHandler.bind(this,'Jitendra')}
+         > My Hobbies: Cricket</Person> 
+
+         <Person name={this.state.Person[1].name}  
+         age={this.state.Person[1].age}
+         click={this.swithcNameHandler.bind(this,'Mohan')}
+         changed={this.nameChangedHandler}> My Hobbies: Fotball</Person>
+         </div>:null
+
+}
+
+--------------------------Handing Dynamic content Javascript way----------------------------------------------
+1. Like in above section we have used {} with in the JSX, see below
+{ this.state.showPerson === true?
+           <div>
+         <Person name={this.state.Person[0].name}  
+         age={this.state.Person[0].age}
+         click={this.swithcNameHandler.bind(this,'Jitendra')}
+         > My Hobbies: Cricket</Person> 
+
+         <Person name={this.state.Person[1].name}  
+         age={this.state.Person[1].age}
+         click={this.swithcNameHandler.bind(this,'Mohan')}
+         changed={this.nameChangedHandler}> My Hobbies: Fotball</Person>
+         </div>:null
+
+}
+But instead of this we can use the use tradition if condition for this like below:
+render() {
+    // inline styling for we used for buttons
+    const button_style={
+      backgorundColor:'White',
+      font:'inherit',
+      border:'1px solid blue',
+      padding:'8px',
+      cursor:'pointer',
+      margin:'0 16px auto'
+    }
+    let person=null; // See this variable and then if block below. For more details see App.js file.
+    togglePersonHandler1 = () =>{
+      const doesShow = this.state.showPerson_IfBlock;
+      this.setState({showPerson_IfBlock:!doesShow});  // Note that whenever state change page reload/re-renders.
+    }
+
+    if(this.state.showPerson_IfBlock) // tradition if block before return block.
+    {
+      person =(<Person name={this.state.Person[1].name}  
+      age={this.state.Person[1].age}
+      click={this.swithcNameHandler.bind(this,'Mohan')}
+      changed={this.nameChangedHandler}> My Hobbies: Fotball</Person>
+      );
+
+    }
+      return (
+        <div className="App">
+          
+         <h1>Hi, I am first react for jitendra</h1>
+         <button style={button_style} onClick={this.swithcNameHandler.bind(this,'Jitendra')}>Switch Name</button> 
+         <button style={button_style} onClick={this.togglePersonHandler}>Show/Hide From JSX Tertionary</button> 
+         <button style={button_style} onClick={this.togglePersonHandler1}>Show/Hide From Tradition if block</button> 
+        {person}   // See the person variable is just written here. which is null if 
+        </div>
+      );
+    }
+}
+
+// Note that whenever state change page reload/re-renders.
+--------------------------------Outputting List--------------------------------------
+1. Here we will display the list of Persons (using Person component) instesad of hard coding Person tag multiple times in App.js for different person
+2. In this section the following code:
+if(this.state.showPerson_IfBlock) // tradition if block before return block.
+    {
+      person =(<Person name={this.state.Person[0].name}  
+      age={this.state.Person[0].age}
+      click={this.swithcNameHandler.bind(this,'Mohan')}
+      changed={this.nameChangedHandler}> My Hobbies: Fotball</Person>
+      ,
+     person =(<Person name={this.state.Person[1].name}  
+      age={this.state.Person[1].age}
+      click={this.swithcNameHandler.bind(this,'Mohan')}
+      changed={this.nameChangedHandler}> My Hobbies: Fotball</Person> );
+    }
+is replaced with 
+if(this.state.showPerson_IfBlock)
+    {
+      person=(
+        <div>
+          {this.state.Person.map(x=>                        // map fucntion is used to apply the same operation on each element of Person array
+            { return <Person name={x.name} age={x.age}
+            click={this.swithcNameHandler.bind(this,'Mohan')}
+            changed={this.nameChangedHandler}/>})}
+        </div>
+      );
+      }
+
+------------------------------------List and State-----------------------------------------
+1. We shoule not update the original state we should use the copy of state to perform any updated and then just reassing the updated copy to original state.
+2. We will see in below example how to do that:
+A new method added in the App.js
+ deletePersonHandle=(personIndex)=>{
+    const person = this.state.Person.splice() // slice method creates the copy of array if no parameter passes. The same thing can also be done by java script spread (...) technique
+    const person1 =[...this.state.Person] // This just simply copy the this.state.Person array to person1.
+    person1.splice(personIndex,1) // when parameter passed slice method sliced the number of element mentioned starting from the index passed. We can do the same with person as well.
+    this.setState({Person:person1});
+  }
+  The following code chnages done in the below code:
+  if(this.state.showPerson_IfBlock)
+    {
+      person=(
+        <div>
+          {this.state.Person.map((x,index)=>                        // map fucntion allow to pass an extra parameter index
+            { return <Person name={x.name} age={x.age}
+            click={this.deletePersonHandle.bind(this,index)} // New method deletePersonHandle alled on the click event and index is passed from here.
+            changed={this.nameChangedHandler}/>})}
+        </div>
+      );
+      }
+// Here if you can see in line number 133, we have first created the copy oif state and then modified the copy and reassing the copy to original state. This is the way we should modifi the state.
+----------------------------------List and Keys-------------------------------------------------
+1. As per the above code if we notice we have not passed the key property when rendring Person list. React expect a key property that helps react to uniqely identify the list values.
+2. React need key property to just re render the elements in list those are changed.
+For this in our Person array we have added a id column to uniquely identity the rows in list
+state ={ // in here also we can use any type of properties, currently we using array and may be adding other properties as we will progress
+
+    Person:[{id:1,name:"max",age:26},
+            {id:2,name:"jitu",age:32}      // see id column added.
+  ],
+  OtherState:"Some other state",
+  showPerson_JSX:false, // state property for JSX syntex
+  showPerson_IfBlock:false // State property for traditional if block
+  }
+
+  Now we will do change in following code block in App.js
+  if(this.state.showPerson_IfBlock)
+    {
+      person=(
+        <div>
+          {this.state.Person.map((x,index)=>                        // map fucntion allow to pass an extra parameter index
+            { return <Person name={x.name} age={x.age}
+            click={this.deletePersonHandle.bind(this,index)} // New method deletePersonHandle alled on the click event and index is passed from here.
+            changed={this.nameChangedHandler}/>})}
+        </div>
+      );
+      }
+
+      as follows:
+      if(this.state.showPerson_IfBlock)
+    {
+      person=(
+        <div>
+          {this.state.Person.map((x,index)=>
+            { return <Person name={x.name} age={x.age}
+            click={this.deletePersonHandle.bind(this,index)}
+            changed={this.nameChangedHandler}
+            key={x.id}/>})}   // notice the ley property that is newly added here
+        </div>
+      );

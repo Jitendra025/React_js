@@ -185,4 +185,4 @@ nameChangedHandler=(event)=>{
 4. For inline css stype we diid for Swithc name buttons in the App.js, please have a look to understanding
 
 --------------------------------- working With list and conditions----------------------------
-1. Rendring List and conditional Content
+1. Rendring List and conditional content
