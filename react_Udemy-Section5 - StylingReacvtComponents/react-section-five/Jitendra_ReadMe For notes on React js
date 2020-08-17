@@ -1,0 +1,110 @@
+----------------- This file containes the notes for section 5 of the Udeay react.js lecture---------------------
+-----------The section 5 code started by using the previous section code in folder react-complete-guide-------------
+
+----------------------------- Setting Style dynamically----------------------------------
+1. Here we will be changeing the color of buttons dynamically. We a=know we have three button in App.js those have inline style using button_style {} variable we have created 
+We know there is one inline style constant variable as follow:
+const button_style={
+      backgroundColor: 'green',
+      color:'white',
+      font:'inherit',
+      border:'1px solid blue',
+      padding:'8px',
+      cursor:'pointer',
+      margin:'0 16px auto'
+    }
+
+    style is added in buttons as :
+    <button style={button_style} onClick={this.togglePersonHandler1}>Show/Hide From Tradition if block</button> 
+    the backgroundColor property of button_style const variable can be reset 
+    button_style.backgroundColor='red';
+
+
+--------------------------Setting style class name dynamically----------------------------------------------
+1. ClassName can be set dynamically by putting in {}
+2. We have declared two classes in App.css file .red and .bold
+3. A paragraph with text, 'This is really working' will be assinged classes dynamically 
+4. let classes =['red','bold'] // this will give one array that has two items [red,bold]
+   let classes =['red','bold'].join(' ') // will retun a string 'red bold' (as we know we can pass two classes in css separated by space)
+  // Code in App.js
+       // let we take an empty array
+       let class_dynamic=[];
+       if(this.state.Person.length<=2){
+         class_dynamic.push('red'); // will give array ['red']
+       }
+       if(this.state.Person.length<=1)
+       {
+         class_dynamic.push('bold');
+       }
+<p className={class_dynamic.join(' ')}>Dynamically classes are assinged for this paragraph.</p>
+
+
+-----------------------------------Adding and Usisng Radium--------------------------------------------------
+1.Radium is a java script package that allow us to use sudo selection or media queries inline in css.
+Sudo selector likle hover on  button
+for example in css
+button:hover{
+
+}
+but this hover will work for each button, Radium package helps to do this sudo selection in inline css.
+
+How to install radium package:
+i. open your project and open visual studio code terminal (view->Terminal) and run command:
+npm install --save radium
+
+Radium is all about style
+
+Changes in the code with Radium
+Change in the inline style variable button_style:
+const button_style={
+      backgroundColor: 'green',
+      color:'white',
+      font:'inherit',
+      border:'1px solid blue',
+      padding:'8px',
+      cursor:'pointer',
+      margin:'0 16px auto', // below this sudo selecto added after adding Radium
+      ':hover':{ // This :hover can be add here in inline after installing Radium package. every sudo selector need to be written in this way :{then name}
+        backgroundColor:'lightgreen',
+        color:'black'
+      }
+    };
+
+Changing the hover property of button_style variable:
+ // changing inline hover property
+            button_style[':hover']={
+              backgroundColor:'lightred',
+              color:'black'
+            }
+  // Note if the Radium is used and button_style is used in multiple components they all sholde be assing a key property with unique value, here I have changed in the three buttoons
+   I have in App.js
+   <button key="button1" style={button_style}>Switch Name</button> // notice the key added for each button. If this is not done an error will come expecting this key for each element
+                                                                  // using Radium class
+         <button key="button2" style={button_style} onClick={this.togglePersonHandler}>Show/Hide From JSX Tertionary</button> 
+         <button key="button3" style={button_style} onClick={this.togglePersonHandler1}>Show/Hide From Tradition if block</button> 
+
+  
+  -----------------------------------Using Radium for Media Queries-------------------------------------------------
+  1. For this we did changes in the person.js . we have added new css variable there.
+  2. But important here is if we are using inline media queries we need to wrap our application in the StyleRoot attribue. It has done in App.js
+  Following const variable has been added in person function of person.js
+  const style = {
+            '@media(min-width:500px)':{ // this tag will fix the width of Person tag  as 450px if the width fo browser is 500px or more 
+                width:'450px'
+            }
+  and above style is added in the div in person
+  <div className="Person" style={style}> 
+  /* style attribute will override the classNAme attribute, but if the width of browser is less tha 500pc the classNAme  class will take over due to condition in media query attribute */
+
+  --------------------------------------Introducing Styled Components---------------------------------------------------
+  1. Styled-Components is one more third party library like radium used to style components
+  2. Can be read on the link styled-components.com
+  3. How to install styled-Components
+  same open treminal in visual studio and run the following command:
+  npm install --save styled-components
+
+  4. As now we will be using styled-components for css styling so I'll comment all radium thing in App.js and person.js
+  5. Must read styled-components from the link above.
+
+  ------------------------------------Working with CSS Modules------------------------------------------------------------
+  1. 
