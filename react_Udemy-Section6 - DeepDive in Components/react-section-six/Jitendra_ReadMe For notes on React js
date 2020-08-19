@@ -1,0 +1,179 @@
+----------------- This file containes the notes for section 6 of the Udeay react.js lecture---------------------
+-----------The section 6 code started by using the previous section code in folder react-complete-guide-------------
+
+----------------------------- Deep Dive in Component----------------------------------
+1. Creating multiple components or divide one components in multipl components for simplicity.
+2. Whatever rending try to creat seprate small components instead of writing all code in single component, simmilar to different small functions in c# or so
+
+
+----------------------------Component Life cycle----------------------------------------
+1. This is very important to understand  and for interview questions as well
+ Component Life cycle (only availabe for class based components or say container components):
+ Component Lifcyle has following methods/constructor and run in the following sequence during component creation:
+  a. constructor(props) -->consutructor called at very first and received props from other components
+  b. getDrivedStateFromProps(props,state) --> This run soon after constructor. This we can used to update the state in case some of the props changed and we need to perfomr state updation
+                                          -->Should not be send any http request or anything like that in this method as it Cause side effects.
+  c. render()--> After above two render method executes. This render method prepare and structure JSX code.
+  d. RenderChidComponents --> Any component included in the render method then rendered. 
+  e. componentDidMount() --> don;t update state in this when used as state update agian cause the re-rendering
+  
+  --------------------------- Component Creation lifcycle in action------------------------------
+  .1 Add constructor in the classe based constructor
+  we have added following in App.js
+  constructor(props)
+  {
+    super(props); // Whenever add costructor we have to call super(), that invoke the costructor of Component class. Constructor can only be called/created in class based components and not in function based.
+                  
+  }
+
+  As definded in above section we  have created methods of ;life cycle in App.js and seen them working in the order mentioned above. See App.js class for these methods.
+
+
+  ---------------------------Component Update life cycle (for props changes)-------------------------
+  1. Just like the life cycle of component creation there  is a life cycle for component updation as well (for props changes).
+  methods and sequence of methods in component update life cycle
+  1. getDrivedStateFromProps(props,state)--> generally used to Sync state to props. Should not be send any http request or anything like that in this method as it Cause side effects.
+  2. shouldComponentUpdate(nextprops, nextState)--> In this method we can cancel the any change in the component. Decide whether to conitnue or not. Should not be send any http request or anything like that in this method as it Cause side effects.
+  3. render()--> After above two render method executes. This render method prepare and structure JSX code.
+  4. Update Child Components Props
+  5. getSnapshotBeforeUpdate(preProps, preState)--> Will used for last minute DOM ops not like changing the DOM but things like the current scroll position of thr user.  Save some data before update and use it after the update in componentDdUpdate method
+  6. ComponentDidUpdate()-->Here we can Cause side effects like request to Http and so but don't change the state else it will cause the re-rendring of the component as state change causes re-rendring.
+                          --> stste chnage in this method will cause a re-rendring cycle again and again.
+
+  For this section we have changed the persons and person components to class based components from function components.
+
+  ---------------------------Component Update life cycle (for state changes)-------------------------
+  1. This is same as changes as for changes in props but and can be invoked when there is any change in the state. So obvisouly will be defined in the class component where state is used.
+   In out case we are using state in App.js only so will be adding some method of update life cycle to see how it works.
+
+  Run the project for this cycle and check the console of developer tool in chrome to understand how the methods are getting called.
+
+
+  From the life cycle methods
+  componentDidMount, componemtDidUpdate and shouldComponentUpdate are most used methods.
+
+  ----------------------------Using useEffect() in Functional Components--------------------------------
+  1. useEffect() is availabel only in React 16 or above versions not before
+  2. We will be using this in our Cockpit functional component.
+  3. useEffect() is the second most important used hook after state. useEffect() is not life cycle hook but a React hook.
+  4. Through useEffect() hook we cover all class based life hooks in Functional components. The two major one componentDidMount and componentDidUpdate are combined in one function.
+  5.useEffect() invokes on every render cycle for example when component created, updated and re-rendered as main component re render.
+  6. We can do Http request from useEffect as well. 
+  7. We have used useEffect() for initial demo urpose in Cockpit.js functional component.
+  8. Very important, I have to chanage the name of  function in Cockpit.js from cockpit to Cockpit. When I have added useEffect in cockpit function I was getting error as below:
+
+  Error: React Hook "useEffect" is called in function "cockpit" which is neither a React function component or a custom React Hook function
+  The above error fixed when I have changed the name from cockpit to Cockpit. The reason for this change is as below:
+  Reason for change of name to caps:--> React component names need to start with a capital letter.  That's because React treats components starting with lowercase letters as DOM tags
+
+  Note: useEffect needs to be added in the body of the function component. It cannot be wrapped into another function. useEffect will be called once the component is mounted
+
+
+
+  -----------------------------------Controlling the useEffect() Behaviour-----------------------
+  1.  As we know above the useEffect will be invoked for every re-render cycle but that will have impact on performace 
+  2. How we can conrtol the execution of useEffect when we want i.e. based on condition
+  3. We can use useEffect() mutltiple time in functional component if needed to run for different conditions
+
+  see below multiple useEffect() for different condition in cockpit.js
+  1. 
+  useEffect(()=>{
+        console.log('Cockpit.js useEffect()');
+        alert('First use effect, will be called only once')
+        // Http request can be done from here.
+    },[]); // Notice the empty array [] here. The second parameter [] tells the dependency when the useEffect should call. If passed empty it will call only first time component will render.
+            // if second parameter not [] passed as all i.e. [] is removefd from here , useEffect will be called for every rendring. .
+
+2. 
+    // Let we have a second useEffect which will call first time (this can't be control) and when there is any change in person property
+    useEffect(()=>{
+        console.log('Cockpit.js useEffect()');
+        alert('Second use effect, will be called on load and when person changed')
+        // Http request can be done from here.
+    },[props.persons]); // now [props.person] tells that this useEffect will call if there is any change in the persons props. i.e when you change anything in the input text box 
+                        // Any change in person will invoke this.
+
+3. 
+    // Let we have a third useEffect which will call on every render
+    useEffect(()=>{
+        console.log('Cockpit.js useEffect()');
+        alert('Third use effect, will be called always on every render')
+        // Http request can be done from here.
+    }); // see second parameter [] is not there
+
+--------------------------------Cleaning up the Life cycle Hooks and UseEffect()-----------------------------------
+1. Cleaning up here is if we want to do some cleaning or closing of objects , some event listner before component removes from the dom.
+2. As with Show/Hide button in App.js when we do hide we the component Person actually removes from the DOM, so if before component is getting removed from the DOM we want to do 
+some work, some cleanup code that can be done using one more Life Cycle Hook that is
+
+componentWillUnmount(). // This will only be called when component is removed from DOM (Hide also remove the component from DOM)
+We have used the above in Persons.js class component.
+
+3. Cleaup work can be done in useEffect(). This can be done by using a return statement havng an anonyms function
+see below:
+useEffect(()=>{
+        console.log('Cockpit.js useEffect()');
+        alert('First use effect, will be called only once')
+        return(()=>{ // this will be called when component is about to remove from DOM and after every render cycle. or more precise , it runs before the main useEffect function and After the (first) render cycle
+            console.log('Cockpit.js clean up work here()')
+        })
+        // Http request can be done from here.
+    },[]); 
+Note te return statement above.
+
+--------------------------Using shouldComponentUpdate for Optimization--------------------------
+1. shouldComponentUpdate is a lifcycle hook through which we can cancel the any change in the component. Decide whether to conitnue or not allow update.
+2. shouldComponentUpdate used for optimization to control the rendring due to any update in component
+3. For example in App.js if we do any change in Cockpit it will render the whole App.js which will cause the re-rendring of Persons component where there is no chnage in Person
+ we can avoid that using the shouldComponentUpdate method in classed based component
+ shouldComponentUpdate(nextprops, nextState)
+    {
+        console.log('Persons.js shouldComponentUpdate method called');
+        if(nextprops.person!==this.props.person) // check if property change then only re-render person and not due to change in any other component like Cockpit or App.js
+        {
+            return true; // render Persons only if there is any chnage in the person property of Persons
+        }
+        else
+        {return false; // don't render}
+        // we can change the upcoming props like below
+        // this.props=nextprops; -------------commented for this exercise and will be used when will do more deep dive.
+        //return true;
+    }
+
+    --------------------------Optimizing Functional using React.memo()--------------------------
+    1. Change in Cockpit.js
+    export default React.memo(Cockpit); // React.memo() prevent functional component to re render if there is no change in any of the dependent property of this component.
+
+
+    ----------------PureCompoents instead of shouldComponentUpdate-------------------------------------------------
+    1. Like in shouldComponentUpdate we check for person property is changed than only will allow re-rendring. What if there are muliple properties to check, yes that can be done using 
+    if conditoion like
+    shouldComponentUpdate(nextprops, nextState)
+    {
+        if(nextprops.person!==this.props.person !! nextprops.property2!==this.props.property2)  // multiple property check.
+        {
+            return true; // render Persons only if there is any chnage in the person property of Persons
+        }
+        else
+        {return false; }// don't render
+    }
+
+    the above can be done uisng PureComponent
+    To use PureComponent we have to extend PureComponent class instead of Component. And PureCompoent class has inbuilt shouldComponentUpdate that checks all properties and we don;t need
+    to write shouldComponentUpdate explicitly.
+
+    To use Pure Component following lines need to be changed in Persons.js.
+    import React, {Component} from 'react'; Need to replcae with as below
+    import React, {PureComponent} from 'react';
+
+    class Persons extends Component{ ----Need to replcae with as below
+    class Persons extends PureComponent{
+
+      shouldComponentUpdate method to be remove. this should not be use when using PureComponent
+
+-------------How react update the DOM------------------------------
+1. How does React update the reacl DOM. The DOM in the browser?
+2. When the render method called it does not immediatly update the real DOM.
+3. render method first compare the virtual DOM. It has a copy of old Virtual DOM and Re-Render DOM
+4. Render method compares the old and new virtual DOM and update the real DOM only if there is any differeneces. Also it update only those components in real DOM those are changed and 
+not all components. For example if changes are in a singlre button only than only tha button will change not threplacede full real DOM. If there is no chnage there is no touch to real DOM.
