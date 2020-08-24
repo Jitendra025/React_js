@@ -115,6 +115,7 @@ useEffect(()=>{
         console.log('Cockpit.js useEffect()');
         alert('First use effect, will be called only once')
         return(()=>{ // this will be called when component is about to remove from DOM and after every render cycle. or more precise , it runs before the main useEffect function and After the (first) render cycle
+                      // That means useEffect() will be called only after the return statement of the functiona component executed and components are loaded/mounted in the DOM
             console.log('Cockpit.js clean up work here()')
         })
         // Http request can be done from here.
@@ -177,3 +178,110 @@ Note te return statement above.
 3. render method first compare the virtual DOM. It has a copy of old Virtual DOM and Re-Render DOM
 4. Render method compares the old and new virtual DOM and update the real DOM only if there is any differeneces. Also it update only those components in real DOM those are changed and 
 not all components. For example if changes are in a singlre button only than only tha button will change not threplacede full real DOM. If there is no chnage there is no touch to real DOM.
+
+
+
+---------------------------Rendring Adjacent JSX element-----------------------------------
+1. As we remember in the very first courses we have mentioned that in the render method every JSX element should be wrapped in a root element.
+like we did in App.js as follow: every element  {person}, {cockpit} is wrapped in a single div to give impression that it's returning a single objet.
+ return (
+          <div className="App">
+            <Cockpit showPerson={this.state.showPerson}
+            personsLength={this.state.Person.length}
+            clicked={this.togglePersonHandler}></Cockpit>
+          {person} 
+          </div>
+      );
+2. But there is a way we can return multiple JSX elememts without wrapping in a single root. We can return elements in as an array. But in that array each elemet should have a key attribute
+let see below as we  did chnage in Person.js:
+
+before:
+return (<StyledDev>
+        <p onClick={this.props.click}>I am  {this.props.name} and I am {this.props.age} years old</p>  
+        <p>{this.props.children}</p>  
+        <input type="text" onChange={this.props.changed} value={this.props.name}></input>
+        </StyledDev>
+    );
+
+After: Note the array element are seprataed by comma (,) and a key attribute added for each element
+return [<p key ="Element1" onClick={this.props.click}>I am  {this.props.name} and I am {this.props.age} years old</p>,
+        <p key ="Element2">{this.props.children}</p>,
+        <input type="text" key ="Element3" onChange={this.props.changed} value={this.props.name}></input>
+        ];
+
+3. As above we have usd <div> (before code in point 1) to warp multiple component, instead of this we can use <React.Framegment> to warp a multiple element in a single root, in case we do not want to wrap in 
+a html element or we don't want to send multiple elment in an array.
+
+-------------------------------Higher Order Components (hoc)-Introduction-----------------------------------------
+1. Higher order components are componets that worked as wrapper componnet. Like we wrapped our multiple components in a div element.
+to do this we can create one hoc which is having a div element and in there all the childers components are passed.
+2. We have done this in the WithClass hoc component under the hoc folder (all hoc component should go under hoc folder as per react guidline folder name can be other than hoc but recommended is hoc)
+3. WithClass then used in the App.js return staement.
+
+----------------------Another way of creating hoc component------------------
+1. We have seen the one way we can create the hoc component in above section where we have created WithClass hoc component.
+2. Here we have one more way to write hoc components.Check video 106 for this exercise on udemy. This will come later as well with code.
+
+-------------------------Setting state correctly-----------------------------------
+1. In the previous lessons we have learned that we can update the state using this.setState method like we did in App.js  as below:
+ this.setState({
+      Person:persons
+    });
+  
+  But what if any state is dependent on the value of previous state: for example if we are changing the counter that is dependted on previous value of counter see below
+
+ this.setState({
+      Person:persons,
+      counter:this.state.counter+1
+    });
+We can do the value of counter change as above but some time react not immediatly chnaged the state and if the next time or some where else we will be doing the same update we may not have the updated value of counter there
+This can be overcome if we write the state update like this. This is needed only when we are changing the value of state variable based on some previous value of that or other variable
+
+this.setState(prevState,props)=>{
+  return{
+    Person:persons,
+      counter:prevState.counter+1
+  };
+};
+ so in this scenario it will guarntee that counter is picking the latest last update value of counter.
+
+ ---------------------------Using PropTypes-------------------------
+ 1. Here we will see how to receive props properly.
+2. As we have passes props in the components and we want to ensure that the props are passed what is expected.
+like for name we are expecting string for age we are expecting number and for click and changed in Persons we are expecting function.
+This can be ensure using the PropTypes.
+see the Person.js class where we have imported PropTypes and then defoned the type of different props in there
+So as soon as you will pass a typepof value this is not expected for example string for age, you will see a warning in the developer tool.
+Warning like below:
+
+Warning: Failed prop type: Invalid prop `age` of type `string` supplied to `Person`, expected `number`.
+    in Person (at Persons.js:49)
+    in Persons (at App.js:86)
+    in div (at App.js:85)
+    in div (at WithClass.js:4)
+    in withClass (at App.js:99)
+    in App (at src/index.js:9)
+    in StrictMode (at src/index.js:8)
+
+--------------------------Using Refs---------------------------------------
+1. ref keyword in react to get the current element in the list of element.
+for example in the Perosns.js class we are rendring the list of person.js. And in the person.js there is one input element as well
+Now how shoud I keep the last input in focus when page render, as the there can be any number of person and I need to keep text box in focus for last person
+here ref keyword comes in picture that will pick the last element and bring that in focus.
+
+ref keyword can be set and use in two ways,first using anonymus function and second by setting the property in constructor.  Person.js component has both of types defined.
+
+
+
+------------------------How to use ref keyword in function components---------------------
+1. As in the above section we have see using of Ref. property that is used in ref keyword is set in componentDidMount() life cycle hook method. But this lifecycle hook method is 
+exist for the class based components and not in functional components.
+Than how we should use ref in functional components?
+
+We can use useRef in the functional compnent to use ref keyword in the functional components
+in the cockpit.js functional component we have used the useRef and in the one of the useEffect method we have set the ref property as to click the button.
+
+
+-------------------Understanding prop chain problem-------------------------------------------------
+
+

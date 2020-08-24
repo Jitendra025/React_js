@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useRef } from 'react'; // notice useRef that will be used to use ref in functional components
 
 import './Cockpit.css';
 
 const Cockpit = ( props ) => {
+    const toggelBtnRef=useRef(null); //assign null at time of initialization.
+
     useEffect(()=>{
         console.log('Cockpit.js useEffect1()');
         alert('First use effect, will be called only once')
+        toggelBtnRef.current.click();// This will click the last(when list of cockpit component rendered )
         return(()=>{ // this will be called when component is about to remove from DOM and after every render cycle. or more precise , it runs before the main useEffect function and After the (first) render cycle
             console.log('Cockpit.js clean up work here()')
         })
@@ -45,7 +48,8 @@ const Cockpit = ( props ) => {
         <div className='Cockpit'>
             <h1>This is first react for jitendra</h1>
             <p className={assignedClasses.join( ' ' )}>This is really working!</p>
-            <button
+            <button ref={toggelBtnRef} // as the toggelBtnRef is set as toggelBtnRef.current.click(), as cockpit is rendered once only in this application as soon as page will launch it will click the 
+                                        // Toggel persons button. Try removing ans resetting this property in the button to see the effect.
                 className={btnClass}
                 onClick={props.clicked}>Toggle Persons</button>
         </div>

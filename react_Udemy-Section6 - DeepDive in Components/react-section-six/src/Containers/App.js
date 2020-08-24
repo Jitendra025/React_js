@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Persons from '../Components/Persons/Persons' ; // We omit the .js when importing. Note the name Person is started with upper case P. becuae in react keyword starting with lower case are for kind of 
-import Cockpit from '../Components/Cockpit/Cockpit'
+import Cockpit from '../Components/Cockpit/Cockpit';
+
+import WithClass from '../hoc/WithClass'; //hoc component
 class App extends Component {
   constructor(props)
   {
@@ -88,12 +90,18 @@ class App extends Component {
       );
       }
       return (
-          <div className="App">
+          // <div className="App">
+          //   <Cockpit showPerson={this.state.showPerson}
+          //   personsLength={this.state.Person.length}
+          //   clicked={this.togglePersonHandler}></Cockpit>
+          // {person} 
+          // </div>  // this code replcae with hoc comonent WithClass. Which simply replaced div with Withclass
+           <WithClass classes = "App">
             <Cockpit showPerson={this.state.showPerson}
             personsLength={this.state.Person.length}
             clicked={this.togglePersonHandler}></Cockpit>
-          {person} 
-          </div>
+            {person} 
+          </WithClass>  
       );
     }
 }
