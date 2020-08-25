@@ -3,6 +3,7 @@ import './App.css';
 
 import Persons from '../Components/Persons/Persons' ; // We omit the .js when importing. Note the name Person is started with upper case P. becuae in react keyword starting with lower case are for kind of 
 import Cockpit from '../Components/Cockpit/Cockpit';
+import AuthContext from '../context/auth-context';
 
 import WithClass from '../hoc/WithClass'; //hoc component
 class App extends Component {
@@ -43,7 +44,8 @@ class App extends Component {
             {id:2,name:"jitu",age:32}      
   ],
   OtherState:"Some other state",
-  showPerson:true 
+  showPerson:true,
+  authenticated: false
   }
 
   deletePersonHandle=(personIndex)=>{
@@ -70,7 +72,10 @@ class App extends Component {
       Person:persons
     })
   }
-
+  loginHandler = () => {
+    alert('login butoon clicked through AuthContext');
+    this.setState({ authenticated: true });
+  };
     togglePersonHandler = () =>{
       const doesShow = this.state.showPerson_IfBlock;
       this.setState({showPerson_IfBlock:!doesShow});  // Note that whenever state change page reload/re-renders.
@@ -96,12 +101,20 @@ class App extends Component {
           //   clicked={this.togglePersonHandler}></Cockpit>
           // {person} 
           // </div>  // this code replcae with hoc comonent WithClass. Which simply replaced div with Withclass
+          <AuthContext.Provider
+          value={{
+            authenticated: this.state.authenticated,
+            login: this.loginHandler
+          }}
+        >
            <WithClass classes = "App">
             <Cockpit showPerson={this.state.showPerson}
             personsLength={this.state.Person.length}
             clicked={this.togglePersonHandler}></Cockpit>
             {person} 
           </WithClass>  
+          </AuthContext.Provider> // As we have wrapped the components those provide and using the AuthContext the values (set the values) to AuthContext. For example if {person} is not using the authetication
+                                  // then we dont need to wrap that with AuthContext.Provider tag.
       );
     }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect,useRef } from 'react'; // notice useRef that will be used to use ref in functional components
 
 import './Cockpit.css';
+import AuthContext from '../../context/auth-context';
 
 const Cockpit = ( props ) => {
     const toggelBtnRef=useRef(null); //assign null at time of initialization.
@@ -52,6 +53,10 @@ const Cockpit = ( props ) => {
                                         // Toggel persons button. Try removing ans resetting this property in the button to see the effect.
                 className={btnClass}
                 onClick={props.clicked}>Toggle Persons</button>
+                <AuthContext.Consumer>
+                    {(context)=><button onClick={context.login}>Log In</button>}
+                    
+                </AuthContext.Consumer>
         </div>
     );
 };

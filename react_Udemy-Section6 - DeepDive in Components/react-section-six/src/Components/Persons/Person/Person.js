@@ -3,6 +3,7 @@ import './Person.css'
 // import Radium from 'radium'  commented as now using styed components
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import AuthContext from '../../../context/auth-context';
 const StyledDev= styled.div`
     width:60%;
     margin:16px auto;

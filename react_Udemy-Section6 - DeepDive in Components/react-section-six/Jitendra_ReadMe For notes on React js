@@ -282,6 +282,13 @@ We can use useRef in the functional compnent to use ref keyword in the functiona
 in the cockpit.js functional component we have used the useRef and in the one of the useEffect method we have set the ref property as to click the button.
 
 
--------------------Understanding prop chain problem-------------------------------------------------
+-------------------Using the Context API-------------------------------------------------
+1. Context APi is used when we are passing props from to a chain of components.
+ Like for example if we authenticated a user and set a flag authenticated as true and that flag we need to pass to our person and cockpit components, in that case we will be passing auth to persons then person and to conckpit aswell
+ .
+2. Context API is used to avoid this kind of props chain passing from component to component.
+3. We have created the Auth-context.js under Context folder
+4. Then we have used the AuthContext(name can be anything, here we have used authenticated named flag so name is AuthContext) to wrap those components only those will be using the authentication flag.
+
 
 
