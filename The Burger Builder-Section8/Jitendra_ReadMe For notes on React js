@@ -54,3 +54,8 @@ So in the project each css file will have .module in file name. Possibly changin
 5. Open the fisrt link and find opan sans and click and under the select style click on Regular 400 and bold 700 that we are going to use here
 6. Then in the right hand side go to Embed and copy the link and paste in in the index.html page
 
+--------------------------------------------------------------------
+1. For applying prop type validation we need to inslatt the prop-types package
+commnad to install that is:
+npm install --save prop-types
+
