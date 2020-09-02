@@ -43,6 +43,9 @@ Steps:
                                                       // This will generated the unque class name to avoid clashes of same name in different css files
 7 Do the same in the webpack.config.prod.js
 
+8. As due to some reason or the higher version of react 16.13 I am using the above changes does work and importing CSS class does not work actually after enabling css module.
+9. I googled it ans found out that we can give the name of css file by adding .module in between for example Layout.module.css and that worked for me.
+So in the project each css file will have .module in file name. Possibly changing dev and prod coonfig not needed in higher version of react to enable css modules.
 -------------------------- -------------------------------
 1. Steps to get google fonts if we need to use.
 2. In this project we will be uisng opan sans google fonts
