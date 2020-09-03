@@ -3,7 +3,7 @@
 CSS Modules let you use the same CSS class name in different files without worrying about naming clashes.
 for example
 
-Button.module.css.. this file has a class .error
+Button.css.. this file has a class .error
 .error {
   background-color: red;
 }
@@ -17,7 +17,7 @@ another-stylesheet.css
 using both style sheet those have same class name (thoug doing different bit)
 Button.js
 import React, { Component } from 'react';
-import styles from './Button.module.css'; // Import css modules stylesheet as styles
+import styles from './Button.css'; // Import css modules stylesheet as styles
 import './another-stylesheet.css'; // Import regular stylesheet
 class Button extends Component {
   render() {
@@ -28,7 +28,7 @@ class Button extends Component {
 }
 
 We can import stylesheet like below only when css module is setup:
-import styles from './Button.module.css'; 
+import styles from './Button.css'; 
 
 How to setup css module in the project
 Steps:

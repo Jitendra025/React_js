@@ -1,10 +1,11 @@
 import React from 'react';
 import Aux from '../../../hoc/Auxiliary';
+import Button from '../../../components/UI/Button/Button';
 
 const orderSummary=(props)=>{
  const ingredientSummary = Object.keys(props.ingredients).map(igKey=>{
 
- return <li>
+ return <li key ={igKey}>
             <span style={{transform:'capitalize'}}>{igKey}:{props.ingredients[igKey]}</span>
         </li>
  });
@@ -16,10 +17,11 @@ const orderSummary=(props)=>{
                 <ul>
                     {ingredientSummary}
                 </ul>
+                <p><strong>Total Price: {props.price.toFixed(2)}</strong></p>
                 <p>Do you want to checkout?</p>
+                <Button btnType={'Danger'} clicked={props.purchaseCancelled}>CANCEL</Button>
+                <Button btnType={'Success'} clicked={props.purchaseContinue}>CONTINUE</Button>
             </Aux>
  )
-
 };
-
 export default orderSummary;
