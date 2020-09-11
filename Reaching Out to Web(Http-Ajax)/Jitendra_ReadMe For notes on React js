@@ -1,0 +1,24 @@
+---------------------
+1. In this module we will be using the http and ajax calls.
+2. In this module we will be using the url 
+https://jsonplaceholder.typicode.com
+, the above url simply provides the fake online  REST API for testing and prototyping. go to the above link to check more.
+
+3. In java script we can use the XMLHttpRequest to call APIs but in the module we will be using Axios package. Axios package can be connect to java script and  react too
+following are the features of Axios package:
+i. Make XMLHttpRequests from the browser
+ii. Make Http request from node.jsonplaceholder
+iii.Support the 'Promise' API
+iv. intercept request and resonse
+v. Transform request and response data
+vi.Automatic transform of json data
+vii. Client side support for protecting  against XSRF.
+
+|command to install axios in Visual studio core terminal or in cmd is 
+npm install axios
+
+3. As we study in the last sections that we can make the http requrest in some of the life cycle method of class components, so we will be doing that here.
+As https request is a kind of side efect, side effect means it's not rendering or chaging react component but it's fetching ot sending some data. componentDidMount method in 
+class component allow to have ahttp request.
+Read a but about axios and related to setting of axis interceptaors in react setting a default global configuration for axios
+Axios Docs: https://github.com/axios/axios

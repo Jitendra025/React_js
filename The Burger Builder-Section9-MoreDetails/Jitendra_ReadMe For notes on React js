@@ -1,0 +1,22 @@
+-----------------------Firebase and Right Database------------------------
+link for firebase page and to use Firebase database for this project
+https://firebase.google.com/
+
+steps to create Firebase project (database) to use in this module.
+1. Goto Firbase.google.com
+2. Login with you gmail account
+3. See pricing option first
+4. Click on Go to console
+5. Click Create project and create project
+6. create project react-my-burger
+7. Then go in to Project Overview->Develop->Realtime Database
+8. Click on create database (this create a mongo database in Firebase itself and gives us a API url through which we can post and pull data.)
+9. Note down the URL and go to Rules and set read and write properties to true.
+10 ApI end point for database for this module is https://react-my-burger-20231.firebaseio.com/
+
+go to the main folder where src, components and other folder present in this project foldr burgerbuuilder
+and install the package axios using command npm install --save axios (will use this package to send http requests)
+
+-------------------spinner---------------------------
+1. To show case spinner we have searched css spinner in google and on link https://projects.lukehaas.me/css-loaders link.
+we picke whole source code for a perticular spinner.
